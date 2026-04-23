@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="az" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Təhsil Portalı</title>
+    <!-- bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="/_sdk/element_sdk.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: "Source Sans 3", sans-serif;
+      }
+      .sidebar-link {
+        transition:
+          background-color 0.15s ease,
+          border-left-color 0.15s ease;
+      }
+      .sidebar-link:hover {
+        background-color: #e5e7eb;
+        border-left-color: #1e40af;
+      }
+      .sidebar-link.active {
+        background-color: #dbeafe;
+        border-left-color: #1e40af;
+        color: #1e40af;
+      }
+      .card-hover {
+        transition:
+          box-shadow 0.2s ease,
+          transform 0.2s ease;
+      }
+      .card-hover:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+      .video-thumb {
+        transition: opacity 0.2s ease;
+      }
+      .video-thumb:hover {
+        opacity: 0.9;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+          position: fixed;
+          z-index: 50;
+          height: 100%;
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+      }
+    </style>
+    <style>
+      body {
+        box-sizing: border-box;
+      }
+    </style>
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  </head>
+  <body class="h-full bg-gray-50 text-gray-800">
+    <div class="h-full flex flex-col overflow-auto">
+      <!-- Top Blue Line -->
+      <div class="w-full h-1 bg-blue-800 flex-shrink-0"></div>
+      <!-- Header -->
+      <header
+        class="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between flex-shrink-0"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Mobile Menu Button -->
+          <button
+            id="menuToggle"
+            class="md:hidden p-2 rounded hover:bg-gray-100"
+          >
+            <svg
+              class="w-6 h-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewbox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+          <!-- Logo Area -->
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 bg-blue-800 rounded flex items-center justify-center"
+            >
+              <svg
+                class="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewbox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                />
+              </svg>
+            </div>
+            <div>
+              <h1 id="portalTitle" class="text-lg font-semibold text-blue-800">
+                E-imza
+              </h1>
+              <p class="text-xs text-gray-500">Təhsil Portalı</p>
+            </div>
+          </div>
+        </div>
+        <!-- Search -->
+        <div class="hidden sm:flex items-center">
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Axtar..."
+              class="w-48 lg:w-64 px-4 py-2 pr-10 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            />
+            <button
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewbox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+      <!-- Main Layout -->
+      <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside
+          id="sidebar"
+          class="sidebar w-56 bg-gray-100 border-r border-gray-200 flex-shrink-0 md:relative md:transform-none"
+        >
+          <nav class="py-4">
+            <ul class="space-y-1">
+              <li>
+                <a
+                  href="index.html"
+                  class="sidebar-link flex items-center gap-3 px-4 py-3 border-l-4 border-transparent text-gray-700"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewbox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                    /></svg
+                  ><span class="text-sm font-medium">Ana səhifə</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mektebler.html"
+                  class="sidebar-link flex items-center gap-3 px-4 py-3 border-l-4 border-transparent text-gray-700"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewbox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    /></svg
+                  ><span class="text-sm font-medium">Məktəblər</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="muellimler.html"
+                  class="sidebar-link  flex items-center gap-3 px-4 py-3 border-l-4 border-transparent text-gray-700"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewbox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    /></svg
+                  ><span class="text-sm font-medium">Müəllimlər</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="sinaqlar.html"
+                  class="sidebar-link active flex items-center gap-3 px-4 py-3 border-l-4 border-transparent text-gray-700"
+                >
+                  <svg class="w-5 h-5" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M480 576L192 576C139 576 96 533 96 480L96 160C96 107 139 64 192 64L496 64C522.5 64 544 85.5 544 112L544 400C544 420.9 530.6 438.7 512 445.3L512 512C529.7 512 544 526.3 544 544C544 561.7 529.7 576 512 576L480 576zM192 448C174.3 448 160 462.3 160 480C160 497.7 174.3 512 192 512L448 512L448 448L192 448zM224 216C224 229.3 234.7 240 248 240L424 240C437.3 240 448 229.3 448 216C448 202.7 437.3 192 424 192L248 192C234.7 192 224 202.7 224 216zM248 288C234.7 288 224 298.7 224 312C224 325.3 234.7 336 248 336L424 336C437.3 336 448 325.3 448 312C448 298.7 437.3 288 424 288L248 288z"/></svg>
+                  <span class="text-sm font-medium">Sınaqlar</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+        <!-- Overlay for mobile -->
+        <div
+          id="overlay"
+          class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"
+        ></div>
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto p-6">
+          <div class="max-w-5xl mx-auto">
+            <div class="mb-6">
+              <h2 class="text-3xl font-semibold text-blue-800">Sınaq 1</h2>
+              <p class="mt-2 text-gray-600">Aşağıdakı 20 sualın hamısını doldurun. Hər sual 5 baldır. Bitirdikdən sonra suallar silinəcək və "Xala bax" düyməsi görünəcək.</p>
+            </div>
+
+            <div id="quizContainer">
+              <form id="quizForm" class="space-y-6"></form>
+              <div class="flex justify-end">
+                <button id="finishBtn" type="button" class="px-6 py-3 bg-blue-800 text-white rounded hover:bg-blue-900">Bitdi</button>
+              </div>
+            </div>
+
+            <div id="resultCard" class="hidden mt-8 p-6 bg-white rounded-lg shadow border border-gray-200">
+              <p class="text-gray-700">Sınaq tamamlandı. Suallar artıq göstərilmir.</p>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <button id="showScoreBtn" type="button" class="px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700">Xala bax</button>
+                <button id="reviewAnswersBtn" type="button" class="px-6 py-3 bg-blue-800 text-white rounded hover:bg-blue-900">Suallara geri bax</button>
+              </div>
+              <div id="scoreSummary" class="hidden mt-6 space-y-3 text-gray-700"></div>
+            </div>
+          </div>
+        </main>
+    <script>
+      const questions = [
+        {
+          text: "Azərbaycanın paytaxtı hansıdır?",
+          options: ["Bakı", "Gəncə", "Şəki", "Sumqayıt"],
+          answer: "Bakı",
+        },
+        {
+          text: "Hansı planet Günəşə ən yaxın planetdir?",
+          options: ["Venera", "Yupiter", "Merkuri", "Mars"],
+          answer: "Merkuri",
+        },
+        {
+          text: "Hansı rəqəm onluğun sağında yerləşir?",
+          options: ["1", "10", "100", "1000"],
+          answer: "10",
+        },
+        {
+          text: "Su nə vaxt 100 dərəcədə qaynar?",
+          options: ["0°C", "50°C", "100°C", "150°C"],
+          answer: "100°C",
+        },
+        {
+          text: "Dünyanın ən böyük okeanı hansıdır?",
+          options: ["Atlantik", "Sakit", "Hind", "Arktik"],
+          answer: "Sakit",
+        },
+        {
+          text: "Hansı heyvan quş deyil?",
+          options: ["Qartal", "Kəpənək", "Qaz", "Sərçə"],
+          answer: "Kəpənək",
+        },
+        {
+          text: "Hansı planetin adı Roma müharibə tanrısından götürülüb?",
+          options: ["Mars", "Saturn", "Neptun", "Uran"],
+          answer: "Mars",
+        },
+        {
+          text: "İnsan orqanizmində ən böyük orqan hansıdır?",
+          options: ["Böyrək", "Mədə", "Dəri", "Ürək"],
+          answer: "Dəri",
+        },
+        {
+          text: "Hansı rəqəm cəmi 10 verir?",
+          options: ["6+3", "7+2", "4+5", "2+9"],
+          answer: "7+2",
+        },
+        {
+          text: "Hansı ölkənin bayrağı alma formasında deyil?",
+          options: ["Yaponiya", "Türkiyə", "Fransa", "Braziliya"],
+          answer: "Braziliya",
+        },
+        {
+          text: "Hansı rəngdə göy görünür?",
+          options: ["Yaşıl", "Qırmızı", "Mavi", "Sarı"],
+          answer: "Mavi",
+        },
+        {
+          text: "Hansı ildir yeni il qeyd edilir?",
+          options: ["1 yanvar", "14 fevral", "8 mart", "31 dekabr"],
+          answer: "1 yanvar",
+        },
+        {
+          text: "Hansı fənn bitkiləri öyrənir?",
+          options: ["Biologiya", "Kimya", "Fizika", "Riyaziyyat"],
+          answer: "Biologiya",
+        },
+        {
+          text: "Hansı fənn cisimlərin hərəkətini öyrənir?",
+          options: ["Fizika", "Tarix", "Coğrafiya", "İngilis dili"],
+          answer: "Fizika",
+        },
+        {
+          text: "Hansı planetdə həyat bildiyimiz kimi yoxdur?",
+          options: ["Mars", "Yer", "Venera", "Sirius"],
+          answer: "Mars",
+        },
+        {
+          text: "Hansı say böyükdür?",
+          options: ["30", "20", "10", "5"],
+          answer: "30",
+        },
+        {
+          text: "Müəllim sinifdə nə edir?",
+          options: ["Oxuyur", "Şagirdə sual verir", "Oyun oynayır", "Yemək yeyir"],
+          answer: "Şagirdə sual verir",
+        },
+        {
+          text: "Hansı quruluş suda yaşayır?",
+          options: ["At", "Balıq", "Pişik", "Quş"],
+          answer: "Balıq",
+        },
+        {
+          text: "Hansı rəqəm təkdir?",
+          options: ["2", "4", "6", "7"],
+          answer: "7",
+        },
+        {
+          text: "Hansı ay ilin 12-si deyil?",
+          options: ["Mart", "Sentyabr", "Noyabr", "Juz"],
+          answer: "Juz",
+        },
+      ];
+
+      function renderQuiz() {
+        const quizForm = document.getElementById("quizForm");
+        questions.forEach((question, index) => {
+          const questionNumber = index + 1;
+          const fieldset = document.createElement("fieldset");
+          fieldset.id = `question_${index}`;
+          fieldset.className = "p-4 bg-white border border-gray-200 rounded-lg shadow-sm";
+
+          const legend = document.createElement("legend");
+          legend.className = "text-lg font-medium text-gray-800 mb-3";
+          legend.textContent = `${questionNumber}. ${question.text}`;
+          fieldset.appendChild(legend);
+
+          const optionsContainer = document.createElement("div");
+          optionsContainer.className = "space-y-3";
+
+          question.options.forEach((option) => {
+            const optionId = `q${index}_option_${option.replace(/\s+/g, "_")}`;
+            const label = document.createElement("label");
+            label.className = "flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-blue-50";
+            label.htmlFor = optionId;
+
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.id = optionId;
+            input.name = `question_${index}`;
+            input.value = option;
+            input.className = "form-radio h-4 w-4 text-blue-800";
+
+            const span = document.createElement("span");
+            span.className = "text-gray-700";
+            span.textContent = option;
+
+            label.appendChild(input);
+            label.appendChild(span);
+            optionsContainer.appendChild(label);
+          });
+
+          fieldset.appendChild(optionsContainer);
+          quizForm.appendChild(fieldset);
+        });
+      }
+
+      function calculateScore() {
+        const details = questions.map((question, index) => {
+          const selected = document.querySelector(`input[name='question_${index}']:checked`);
+          return {
+            correctAnswer: question.answer,
+            selected: selected ? selected.value : null,
+            unanswered: !selected,
+            isCorrect: selected ? selected.value === question.answer : false,
+          };
+        });
+
+        const correct = details.filter((item) => item.isCorrect).length;
+        const unanswered = details.filter((item) => item.unanswered).length;
+        const incorrect = questions.length - correct - unanswered;
+
+        return {
+          correct,
+          incorrect,
+          unanswered,
+          totalQuestions: questions.length,
+          score: correct * 5,
+          details,
+        };
+      }
+
+      function showScoreSummary(result) {
+        const summary = document.getElementById("scoreSummary");
+        summary.innerHTML = `
+          <div class="rounded-lg bg-blue-50 p-4 border border-blue-100">
+            <p class="text-lg font-semibold text-blue-800">Nəticə</p>
+            <p class="mt-2">Doğru cavablar: <strong>${result.correct}</strong></p>
+            <p>Yanlış cavablar: <strong>${result.incorrect}</strong></p>
+            <p>Cavabsız qalan suallar: <strong>${result.unanswered}</strong></p>
+            <p class="mt-2">Ümumi bal: <strong>${result.score}</strong> / ${result.totalQuestions * 5}</p>
+          </div>
+        `;
+        summary.classList.remove("hidden");
+      }
+
+      function reviewAnswers(result) {
+        const quizContainer = document.getElementById("quizContainer");
+        const resultCard = document.getElementById("resultCard");
+        const finishBtn = document.getElementById("finishBtn");
+
+        quizContainer.classList.remove("hidden");
+        resultCard.classList.remove("hidden");
+        finishBtn.classList.add("hidden");
+
+        result.details.forEach((detail, index) => {
+          const fieldset = document.getElementById(`question_${index}`);
+          const messageId = `feedback_${index}`;
+          let feedback = fieldset.querySelector(`#${messageId}`);
+
+          if (!feedback) {
+            feedback = document.createElement("p");
+            feedback.id = messageId;
+            feedback.className = "mt-3 text-sm font-medium";
+            fieldset.appendChild(feedback);
+          }
+
+          const inputs = fieldset.querySelectorAll("input");
+          inputs.forEach((input) => {
+            const label = input.closest("label");
+            label.classList.remove("bg-green-100", "border", "border-green-300", "bg-red-100", "border-red-300", "hover:bg-blue-50");
+            input.disabled = true;
+
+            if (detail.selected && input.value === detail.selected) {
+              if (detail.isCorrect) {
+                label.classList.add("bg-green-100", "border", "border-green-300");
+              } else {
+                label.classList.add("bg-red-100", "border", "border-red-300");
+              }
+            }
+          });
+
+          if (detail.isCorrect) {
+            feedback.textContent = "Siz doğru cavab vermisiniz.";
+            feedback.classList.remove("text-red-600");
+            feedback.classList.add("text-green-700");
+          } else if (detail.unanswered) {
+            feedback.textContent = `Cavabsız qaldı. Doğru cavab: ${detail.correctAnswer}`;
+            feedback.classList.remove("text-green-700");
+            feedback.classList.add("text-red-600");
+          } else {
+            feedback.textContent = `Yanlış cavab. Doğru cavab: ${detail.correctAnswer}`;
+            feedback.classList.remove("text-green-700");
+            feedback.classList.add("text-red-600");
+          }
+        });
+      }
+
+      function initQuiz() {
+        renderQuiz();
+
+        const finishBtn = document.getElementById("finishBtn");
+        const showScoreBtn = document.getElementById("showScoreBtn");
+        const reviewAnswersBtn = document.getElementById("reviewAnswersBtn");
+
+        finishBtn.addEventListener("click", () => {
+          const quizContainer = document.getElementById("quizContainer");
+          const resultCard = document.getElementById("resultCard");
+          const result = calculateScore();
+
+          quizContainer.classList.add("hidden");
+          resultCard.classList.remove("hidden");
+          resultCard.dataset.result = JSON.stringify(result);
+        });
+
+        showScoreBtn.addEventListener("click", () => {
+          const resultCard = document.getElementById("resultCard");
+          const result = JSON.parse(resultCard.dataset.result || "{}");
+          showScoreSummary(result);
+        });
+
+        reviewAnswersBtn.addEventListener("click", () => {
+          const resultCard = document.getElementById("resultCard");
+          const result = JSON.parse(resultCard.dataset.result || "{}");
+          reviewAnswers(result);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", initQuiz);
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
